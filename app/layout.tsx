@@ -34,9 +34,9 @@ const fontSans = FontSans({
   variable: '--font-sans'
 })
 
-const title = 'NOVA — Your space to explore'
+const title = 'NOVA — Make your next idea real'
 const description =
-  'A space for big questions, fresh perspectives and your next idea.'
+  'A personal workspace to build websites, browser apps and mobile-friendly projects.'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nova-morphic-test.vercel.app'),
@@ -66,6 +66,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  if (process.env.NOVA_BUILDER === 'true') {
+    return (
+      <html lang="en">
+        <body className={fontSans.variable}>{children}</body>
+      </html>
+    )
+  }
   const user = await getCurrentUser()
   // Sharing is opt-in for Better Auth (ENABLE_SHARE=true); the flag is
   // folded into the capabilities on the server so a prebuilt image can
