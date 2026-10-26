@@ -122,7 +122,7 @@ export async function runJob(owner: string, id: string) {
               },
               {
                 role: 'user',
-                content: `Project type: ${current.p.type}. Request: ${job.prompt}\n${current.v ? 'Update these complete current files, preserving working features: ' + JSON.stringify(current.v.files).slice(0, 22000) : 'Create a complete useful starter.'}`
+                content: `Project type: ${current.p.type}. Request: ${job.prompt}\n${current.v ? 'Update these complete current files, preserving working features: ' + JSON.stringify(current.v.files).slice(0, 8000) : 'Create a complete useful starter.'}`
               }
             ]
           }),
@@ -740,7 +740,18 @@ export async function dispatch(
       error instanceof BuilderError
         ? error.message
         : 'Your workspace is temporarily unavailable. Your saved work has not been removed. Please retry.'
-    console.error('NOVA request failed', { reference, status })
+    console.error('NOVA request failed', {
+      reference,
+      status,
+      kind: error instanceof Error ? error.name : 'unknown',
+      code: (error as { code?: string })?.code,
+      diagnostic:
+        error instanceof Error
+          ? error.message
+              .replace(/postgres(?:ql)?:\/\/\S+/gi, '[redacted]')
+              .slice(0, 160)
+          : undefined
+    })
     return Response.json(
       { error: message, reference },
       {
