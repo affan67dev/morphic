@@ -468,6 +468,7 @@ function fromParsedPayload(
   const code = asPublicErrorCode(value.code) ?? classification.code
   const type = asPublicErrorType(value.type) ?? typeForCode(code)
   const preserveMessage =
+    (code === 'provider_auth' && message === 'NOVA’s OpenRouter key is not available on the server yet.') ||
     isIntentionalPublicPayload(value, code) ||
     isToolFailurePayload(message, code) ||
     isMalformedRequestPayload(message, code)
