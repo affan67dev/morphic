@@ -1,3 +1,4 @@
+import { handleNovaChat } from '@/lib/nova/chat'
 import { cookies } from 'next/headers'
 import { after } from 'next/server'
 
@@ -56,6 +57,7 @@ type UsageSettlementSlot = {
 }
 
 export async function POST(req: Request) {
+  if (process.env.NOVA_CHAT_ONLY === 'true') return handleNovaChat(req)
   const startTime = performance.now()
   const abortSignal = req.signal
   let refundUsageOnce: (() => Promise<void>) | undefined
