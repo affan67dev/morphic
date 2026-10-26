@@ -6,6 +6,15 @@ import { getModel } from '@/lib/utils/registry'
 const buckets = new Map<string, { count: number; reset: number }>()
 const MODEL = 'openai/gpt-oss-120b:free'
 
+function streamError(error: unknown): string {
+  const detail = error as { responseBody?: string; cause?: { responseBody?: string } }
+  const body = detail?.responseBody || detail?.cause?.responseBody || ''
+  if (body.includes('Model provider is not configured')) {
+    return JSON.stringify({ error: 'NOVA’s OpenRouter key is not available on the server yet.', code: 'provider_auth', type: 'general', retryable: false })
+  }
+  return serializePublicError(error, { fallbackMessage: 'The model could not finish. Please retry; free models may be busy.' })
+}
+
 export async function handleNovaChat(req: Request): Promise<Response> {
   const origin = req.headers.get('origin')
   const allowedOrigins = new Set(['https://nova-morphic-test.vercel.app', 'https://nova-morphic-test-an26.vercel.app'])
@@ -43,7 +52,7 @@ export async function handleNovaChat(req: Request): Promise<Response> {
       abortSignal: AbortSignal.any([req.signal, AbortSignal.timeout(56000)])
     })
     return result.toUIMessageStreamResponse({
-      onError: error => serializePublicError(error, { fallbackMessage: 'The model could not finish. Please retry; free models may be busy.' }),
+      onError: streamError,
       headers: { 'Cache-Control': 'no-store, no-transform', 'X-Accel-Buffering': 'no' }
     })
   } catch (error) {
