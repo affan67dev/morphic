@@ -724,7 +724,7 @@ export function Chat({
         className={cn(
           'relative flex h-full min-w-0 flex-1 flex-col',
           messages.length === 0 && !isHistoryPending
-            ? 'items-center justify-center'
+            ? 'nova-empty items-center justify-start overflow-y-auto'
             : ''
         )}
         data-testid="full-chat"

@@ -106,7 +106,7 @@ export function ModelSelectorClient({ data }: ModelSelectorClientProps) {
         title="No enabled models are available"
       >
         <span className="truncate max-w-52 text-xs font-medium">
-          No enabled model available
+          Connect a model
         </span>
       </Button>
     )

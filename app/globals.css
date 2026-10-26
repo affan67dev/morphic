@@ -503,3 +503,48 @@
     cursor: pointer;
   }
 }
+
+/* NOVA: an orbital workspace. Scoped welcome styles preserve conversation layouts. */
+:root { --background: #f3f5fa; --foreground: #17213b; --primary: #5269cb; --primary-foreground: #fff; --muted: #e9edf7; --ring: #7789d8; }
+.dark { --background: #101524; --foreground: #edf0fa; --card: #1a2237; --muted: #1a2237; --muted-foreground: #a5aec7; --border: #303b54; --input: #36415a; --primary: #b3c2ff; --primary-foreground: #152044; --popover: #1a2237; --accent: #273451; --sidebar: #141c2e; }
+.nova-header { padding: 22px 26px; background: transparent; }
+.nova-wordmark { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 650; letter-spacing: .16em; text-decoration: none; }
+.nova-mini-mark { color: #8a9fe5; font-size: 29px; line-height: 1; }
+.nova-wordmark-caption { font-size: 11px; font-weight: 400; letter-spacing: 0; color: var(--muted-foreground); margin-left: 14px; }
+.nova-header button { border-radius: 50px; }
+.nova-empty { background: radial-gradient(ellipse at 50% 20%, #6f86ce16, transparent 58%); padding: 100px 0 24px; }
+.nova-welcome { background: transparent; max-width: 850px; }
+.nova-intro { text-align: center; padding: 0 12px 28px; }
+.nova-eyebrow { font-size: 10px; letter-spacing: .22em; font-weight: 600; color: var(--muted-foreground); margin: 20px 0 16px; }
+.nova-title { font-size: clamp(44px, 6vw, 66px); font-weight: 500; line-height: 1.08; letter-spacing: -.055em; }
+.nova-title span { font-family: Georgia, serif; font-style: italic; font-weight: 400; color: #7e93d4; letter-spacing: -.055em; }
+.nova-subtitle { font-size: 13px; line-height: 1.8; color: var(--muted-foreground); margin-top: 17px; }
+.nova-orbit { position: relative; width: 86px; height: 76px; margin: 0 auto; perspective: 200px; }
+.nova-orbit span, .nova-orbit i, .nova-orbit b { position: absolute; inset: 12px 0; border: 1.5px solid #9aafe8; border-radius: 50%; transform: rotate(-28deg); box-shadow: inset 0 0 14px #7b94dc24, 0 0 20px #7b94dc12; }
+.nova-orbit i { transform: rotate(48deg); inset: 4px 17px; border-color: #788fce; }
+.nova-orbit b { transform: rotate(-48deg); inset: 4px 17px; border-color: #b4c3ed; }
+.nova-welcome form > div.relative.flex { background: var(--card, #fff); border: 1px solid var(--input); border-radius: 24px; box-shadow: 0 15px 50px #080e2320, inset 0 1px 0 #ffffff0a; }
+.nova-welcome textarea { padding: 22px; min-height: 90px; font-size: 15px; }
+.nova-welcome form > div.relative.flex:focus-within { border-color: #869bd8; box-shadow: 0 0 0 3px #869bd81a; }
+.nova-suggestions { margin: 22px auto 0; height: 158px; max-width: 650px; }
+.nova-suggestions > div > div:first-child > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; gap: 8px; padding: 0; }
+.nova-suggestions > div > div:first-child button { height: 64px; border-radius: 15px; justify-content: flex-start; flex-direction: column; align-items: flex-start; gap: 5px; padding: 10px 15px; background: #8299df08; border-color: #8299df24; font-size: 11px; }
+.nova-suggestions > div > div:first-child button svg { color: #8ca2df; height: 16px; width: 16px; }
+.nova-suggestions > div > div:first-child button:hover { background: #8299df18; border-color: #8299df66; transform: translateY(-2px); }
+@media (max-width: 639px) {
+  .nova-header { padding: 19px 20px; }
+  .nova-wordmark-caption { display: none; }
+  .nova-wordmark { font-size: 16px; }
+  .nova-empty { padding-top: 92px; }
+  .nova-welcome { padding-inline: 20px; }
+  .nova-intro { padding-bottom: 26px; }
+  .nova-orbit { width: 72px; height: 64px; }
+  .nova-eyebrow { margin-top: 18px; font-size: 9px; }
+  .nova-title { font-size: 47px; }
+  .nova-subtitle { font-size: 12px; }
+  .nova-suggestions { margin-top: 17px; }
+  .nova-welcome textarea { min-height: 82px; padding: 18px; }
+}
+@media (max-width: 359px) { .nova-welcome { padding-inline: 14px; } .nova-title { font-size: 41px; } .nova-header { padding-inline: 16px; } .nova-suggestions > div > div:first-child button { padding-inline: 10px; } }
+@media (max-height: 650px) { .nova-empty { padding-top: 78px; } .nova-orbit { display: none; } .nova-intro { padding-bottom: 18px; } .nova-eyebrow { margin-top: 0; } }
+@media (prefers-reduced-motion: reduce) { .nova-suggestions button { transition: none; } }

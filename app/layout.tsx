@@ -34,12 +34,12 @@ const fontSans = FontSans({
   variable: '--font-sans'
 })
 
-const title = 'Morphic'
+const title = 'NOVA — Your space to explore'
 const description =
-  'A fully open-source AI-powered answer engine with a generative UI.'
+  'A space for big questions, fresh perspectives and your next idea.'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://morphic.sh'),
+  metadataBase: new URL('https://nova-morphic-test.vercel.app'),
   title,
   description,
   openGraph: {
@@ -58,7 +58,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   minimumScale: 1,
-  maximumScale: 1
+  maximumScale: 5
 }
 
 export default async function RootLayout({

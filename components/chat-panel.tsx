@@ -52,7 +52,6 @@ import { useArtifact } from './artifact/artifact-context'
 import { useLibrary } from './library/library-context'
 import { LibraryPickerDialog } from './library/library-picker-dialog'
 import { Button } from './ui/button'
-import { IconBlinkingLogo } from './ui/icons'
 import {
   Tooltip,
   TooltipContent,
@@ -460,15 +459,15 @@ export function ChatPanel({
         'w-full bg-background group/form-container shrink-0',
         messages.length > 0
           ? 'sticky bottom-0 px-2 pb-2 md:pb-4'
-          : 'px-4 md:px-6'
+          : 'nova-welcome px-4 md:px-6'
       )}
     >
       {messages.length === 0 && (
-        <div className="mb-6 md:mb-10 flex flex-col items-center gap-2 md:gap-4">
-          <IconBlinkingLogo className="size-12" />
-          <h1 className="text-xl md:text-2xl font-medium text-foreground">
-            What would you like to know?
-          </h1>
+        <div className="nova-intro">
+          <div className="nova-orbit" aria-hidden="true"><span /><i /><b /></div>
+          <p className="nova-eyebrow">YOUR SPACE TO EXPLORE</p>
+          <h1 className="nova-title" aria-label="What would you like to know?">Big ideas.<br /><span>Start here.</span></h1>
+          <p className="nova-subtitle">Follow a thought. Find a new perspective.<br />Make something worth exploring.</p>
         </div>
       )}
       {uploadedFiles.length > 0 && (
@@ -787,7 +786,7 @@ export function ChatPanel({
             onCompositionEnd={handleCompositionEnd}
             onFocus={() => setIsInputFocused(true)}
             onBlur={() => setIsInputFocused(false)}
-            placeholder={messages.length > 0 ? 'Reply...' : 'Ask anything...'}
+            placeholder={messages.length > 0 ? 'Reply...' : 'Where shall we begin?'}
             spellCheck={false}
             value={input}
             disabled={disabled || isLoading || isToolInvocationInProgress()}
@@ -998,7 +997,7 @@ export function ChatPanel({
               inputRef.current?.focus()
             }}
             inputRef={inputRef}
-            className="mt-2 hidden md:block"
+            className="nova-suggestions mt-2 block"
           />
         )}
       </form>
