@@ -1,0 +1,9 @@
+# NOVA Firebase migration preparation
+
+These deny-all rules are a starting safety boundary, not an implemented Firebase backend. Production continues to use PostgreSQL and Better Auth. Do not deploy these rules into any project used by another application.
+
+A dedicated Firebase project must first provide Authentication, Firestore, and Cloud Storage. Enabling Storage may require billing eligibility; do not change billing without the owner's consent. A complete migration requires a dry-run exporter/importer for workspaces, projects, versions, messages, jobs, and assets; reconciliation of counts and content hashes; authentication account migration or a secure account-claim/password-reset flow; write freeze and cutover; and a tested rollback. Never copy password hashes into insecure files or repositories. The current database remains the source of truth until cutover is tested and authorized.
+
+Proposed Vercel production variable names, subject to final implementation: NEXT_PUBLIC_FIREBASE_API_KEY, NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN, NEXT_PUBLIC_FIREBASE_PROJECT_ID, NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET, NEXT_PUBLIC_FIREBASE_APP_ID, FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY, FIREBASE_STORAGE_BUCKET, and NOVA_PUBLIC_URL. The Firebase web configuration is public client configuration; FIREBASE_PRIVATE_KEY must be a sensitive server-only variable, never prefixed NEXT_PUBLIC. Prefer keyless workload identity if supported and authorized. These names are not consumed by current application code yet.
+
+The implementation must verify Firebase ID tokens before minting secure HttpOnly session cookies, enforce ownership in every Admin route, validate uploads, add CSRF and revocation checks, and test Firestore/Storage rules in emulators and production. No migration tool or cutover is currently implemented.
