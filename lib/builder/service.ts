@@ -50,7 +50,7 @@ async function checkpoint(owner: string, id: string, files: Files) {
   await owned(
     owner,
     sql =>
-      sql`update nova_jobs set checkpoint=${sql.json(files)} where id=${id} and state='building'`
+      sql`update nova_jobs set checkpoint=${JSON.stringify(files)}::jsonb where id=${id} and state='building'`
   )
 }
 
@@ -218,7 +218,7 @@ export async function runJob(owner: string, id: string) {
       )[0]
       if (j?.state !== 'building') return
       const v = (
-        await sql`insert into nova_versions(project_id,owner_id,files,summary) values(${job.project_id},${owner},${sql.json(files!)},${job.prompt.slice(0, 180)}) returning id`
+        await sql`insert into nova_versions(project_id,owner_id,files,summary) values(${job.project_id},${owner},${JSON.stringify(files)}::jsonb,${job.prompt.slice(0, 180)}) returning id`
       )[0]
       await sql`update nova_projects set current_version_id=${v.id},status='ready',updated_at=now() where id=${job.project_id}`
       await sql`update nova_jobs set state='ready',phase='ready',lease_until=null,checkpoint=null,updated_at=now() where id=${id}`
@@ -360,7 +360,7 @@ export async function dispatch(
           )[0]
           if (files) {
             const v = (
-              await sql`insert into nova_versions(project_id,owner_id,files,summary) values(${p.id},${user.id},${sql.json(files)},'Created from a NOVA starter template') returning id`
+              await sql`insert into nova_versions(project_id,owner_id,files,summary) values(${p.id},${user.id},${JSON.stringify(files)}::jsonb,'Created from a NOVA starter template') returning id`
             )[0]
             await sql`update nova_projects set current_version_id=${v.id},status='ready' where id=${p.id}`
           }
@@ -456,7 +456,7 @@ export async function dispatch(
               await sql`select * from nova_versions where id=${project.current_version_id}`
             )[0]
             const v = (
-              await sql`insert into nova_versions(project_id,owner_id,files,summary) values(${p.id},${user.id},${sql.json(old.files)},'Duplicated from your own project') returning id`
+              await sql`insert into nova_versions(project_id,owner_id,files,summary) values(${p.id},${user.id},${JSON.stringify(old.files)}::jsonb,'Duplicated from your own project') returning id`
             )[0]
             await sql`update nova_projects set current_version_id=${v.id},status='ready' where id=${p.id}`
           }
@@ -631,7 +631,7 @@ export async function dispatch(
               'Cancel the current build or wait for it to finish before editing files.'
             )
           const v = (
-            await sql`insert into nova_versions(owner_id,project_id,files,summary) values(${user.id},${id},${sql.json(files)},'Saved a manual file edit') returning id`
+            await sql`insert into nova_versions(owner_id,project_id,files,summary) values(${user.id},${id},${JSON.stringify(files)}::jsonb,'Saved a manual file edit') returning id`
           )[0]
           await sql`update nova_projects set current_version_id=${v.id},status='ready',updated_at=now() where id=${id}`
         })
@@ -684,7 +684,7 @@ export async function dispatch(
               'NOVA has reached today’s shared preview-build limit. Please return tomorrow (UTC).'
             )
           const j = (
-            await sql`insert into nova_jobs(owner_id,project_id,request_key,prompt,checkpoint) values(${user.id},${id},${body.requestKey},${prompt},${checking ? sql.json((await sql`select files from nova_versions where id=${project.current_version_id}`)[0].files) : null}) returning *`
+            await sql`insert into nova_jobs(owner_id,project_id,request_key,prompt,checkpoint) values(${user.id},${id},${body.requestKey},${prompt},${checking ? JSON.stringify((await sql`select files from nova_versions where id=${project.current_version_id}`)[0].files) : null}::jsonb) returning *`
           )[0]
           await sql`update nova_projects set status='building',prompt=${prompt},updated_at=now() where id=${id}`
           await sql`insert into nova_messages(owner_id,project_id,role,content) values(${user.id},${id},'user',${prompt})`
